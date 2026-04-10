@@ -1,0 +1,13 @@
+<h2>Products</h2>
+
+<ul>
+  <% products.forEach(p => { %>
+    <li>
+      <%= p.name %>
+      <a href="/add/<%= p.id %>">Add to Cart</a>
+    </li>
+  <% }) %>
+</ul>
+
+<a href="/cart">View Cart</a> |
+<a href="/login">Login</a>
