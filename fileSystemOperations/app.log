@@ -1,7 +1,0 @@
-INFO Application started
-INFO User logged in
-ERROR Database connection failed
-WARN Low disk space
-INFO User logged out
-ERROR Timeout occurred
-ERROR Database connection failed

@@ -1,2 +1,0 @@
-Adding tag using git command using 
-git tag -a v1.1.0.0 -m "add new versions"
