@@ -40,7 +40,7 @@ async function createUser(req, res) {
     });
 
     await newUser.save();
-    return res.render("signup", {
+    return res.render("login", {
       success: "Account created successfully!"
     });
 
