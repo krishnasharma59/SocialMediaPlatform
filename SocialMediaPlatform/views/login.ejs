@@ -19,17 +19,20 @@
 
 <body>
 
+<!-- 🔥 TOAST CONTAINER -->
+<div id="toast-container" style="
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+"></div>
+
 <form method="post">
   <div class="container d-flex justify-content-center align-items-center vh-100">
     
     <div class="card p-4 shadow" style="width: 400px;">
       
-      <h3 class="text-center mb-3">Login</h3>
-
-      <!-- ✅ ERROR MESSAGE -->
-      <% if (typeof error !== 'undefined') { %>
-        <div class="alert alert-danger"><%= error %></div>
-      <% } %>
+      <h3 class="text-center mb-3">🔐 Login</h3>
 
       <!-- EMAIL -->
       <input 
@@ -69,20 +72,64 @@
   </div>
 </form>
 
-<!-- 🔥 JS -->
+<!-- 🔥 TOAST FUNCTION -->
 <script>
-  function togglePassword() {
-    const pass = document.getElementById("password");
-    pass.type = pass.type === "password" ? "text" : "password";
-  }
+function showToast(message, type = "error") {
+  const toast = document.createElement("div");
 
-  // 🚀 Optional: disable button on submit (prevents double click)
-  document.querySelector("form").addEventListener("submit", function() {
-    const btn = document.getElementById("loginBtn");
-    btn.disabled = true;
-    btn.innerText = "Logging in...";
-  });
+  toast.innerText = message;
+
+  toast.style.background = type === "error" ? "#ef4444" : "#22c55e";
+  toast.style.color = "white";
+  toast.style.padding = "12px 18px";
+  toast.style.marginTop = "10px";
+  toast.style.borderRadius = "8px";
+  toast.style.boxShadow = "0 4px 10px rgba(0,0,0,0.1)";
+  toast.style.fontWeight = "500";
+  toast.style.cursor = "pointer";
+  toast.style.opacity = "0";
+  toast.style.transform = "translateX(50px)";
+  toast.style.transition = "all 0.3s ease";
+
+  document.getElementById("toast-container").appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.opacity = "1";
+    toast.style.transform = "translateX(0)";
+  }, 100);
+
+  setTimeout(() => {
+    toast.style.opacity = "0";
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+
+  toast.onclick = () => toast.remove();
+}
 </script>
+
+<!-- 🔥 PASSWORD TOGGLE -->
+<script>
+function togglePassword() {
+  const pass = document.getElementById("password");
+  pass.type = pass.type === "password" ? "text" : "password";
+}
+</script>
+
+<!-- 🔥 BUTTON LOADING -->
+<script>
+document.querySelector("form").addEventListener("submit", function() {
+  const btn = document.getElementById("loginBtn");
+  btn.disabled = true;
+  btn.innerText = "Logging in...";
+});
+</script>
+
+<!-- 🔥 TRIGGER TOAST FROM BACKEND -->
+<% if (typeof error !== 'undefined') { %>
+<script>
+  showToast("<%= error %>");
+</script>
+<% } %>
 
 </body>
 </html>

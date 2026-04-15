@@ -19,17 +19,20 @@
 
 <body>
 
+<!-- ✅ TOAST CONTAINER -->
+<div id="toast-container" style="
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+"></div>
+
 <form method="post" action="/signup">
   <div class="container d-flex justify-content-center align-items-center vh-100">
     
     <div class="card p-4 shadow" style="width: 400px;">
       
       <h3 class="text-center mb-3">Create Account</h3>
-
-      <!-- ✅ ERROR MESSAGE -->
-      <% if (typeof error !== 'undefined') { %>
-        <div class="alert alert-danger"><%= error %></div>
-      <% } %>
 
       <!-- NAME -->
       <input name="name" type="text" class="form-control mb-2" placeholder="Full Name" required>
@@ -52,7 +55,7 @@
         oninput="validatePassword()"
       >
 
-      <!-- ⚠️ LIVE ERROR -->
+      <!-- PASSWORD ERROR -->
       <div id="passwordError" class="text-danger mb-2" style="display:none;">
         Password must be 14 characters or less
       </div>
@@ -69,19 +72,64 @@
   </div>
 </form>
 
-<!-- 🔥 JS VALIDATION -->
+<!-- 🔥 TOAST SCRIPT -->
 <script>
-  function validatePassword() {
-    const pass = document.getElementById("password").value;
-    const error = document.getElementById("passwordError");
+function showToast(message, type = "error") {
+  const toast = document.createElement("div");
 
-    if (pass.length > 14) {
-      error.style.display = "block";
-    } else {
-      error.style.display = "none";
-    }
-  }
+  toast.innerText = message;
+
+  toast.style.background = type === "error" ? "#ef4444" : "#22c55e";
+  toast.style.color = "white";
+  toast.style.padding = "12px 18px";
+  toast.style.marginTop = "10px";
+  toast.style.borderRadius = "8px";
+  toast.style.boxShadow = "0 4px 10px rgba(0,0,0,0.1)";
+  toast.style.fontWeight = "500";
+  toast.style.cursor = "pointer";
+  toast.style.opacity = "0";
+  toast.style.transform = "translateX(50px)";
+  toast.style.transition = "all 0.3s ease";
+
+  document.getElementById("toast-container").appendChild(toast);
+
+  // Animate in
+  setTimeout(() => {
+    toast.style.opacity = "1";
+    toast.style.transform = "translateX(0)";
+  }, 100);
+
+  // Auto remove
+  setTimeout(() => {
+    toast.style.opacity = "0";
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+
+  // Manual remove
+  toast.onclick = () => toast.remove();
+}
 </script>
+
+<!-- 🔥 PASSWORD VALIDATION -->
+<script>
+function validatePassword() {
+  const pass = document.getElementById("password").value;
+  const error = document.getElementById("passwordError");
+
+  if (pass.length > 14) {
+    error.style.display = "block";
+  } else {
+    error.style.display = "none";
+  }
+}
+</script>
+
+<!-- 🔥 TRIGGER TOAST FROM BACKEND -->
+<% if (typeof error !== 'undefined') { %>
+<script>
+  showToast("<%= error %>");
+</script>
+<% } %>
 
 </body>
 </html>
